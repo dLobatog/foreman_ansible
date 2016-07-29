@@ -12,6 +12,7 @@ module ForemanAnsible
     config.autoload_paths += Dir["#{config.root}/app/overrides"]
     config.autoload_paths += Dir["#{config.root}/app/services"]
     config.autoload_paths += Dir["#{config.root}/app/views"]
+    config.autoload_paths += Dir["#{config.root}/app/lib"]
 
     initializer 'foreman_ansible.register_gettext',
                 :after => :load_config_initializers do
@@ -30,12 +31,23 @@ module ForemanAnsible
           permission :play_roles,
                      { :hosts => [:play_roles, :multiple_play_roles] },
                      :resource_type => 'Host::Managed'
+          permission :view_ansible_roles, :ansible_roles => [:index],
+                                          :hosts => [:new, :edit]
+          permission :destroy_ansible_roles, :ansible_roles => [:destroy]
+          permission :import_ansible_roles,
+                     :ansible_roles => [:import, :confirm_import]
         end
 
         role_assignment_params = { :ansible_role_ids => [],
                                    :ansible_roles => [] }
         parameter_filter Host::Managed, role_assignment_params
         parameter_filter Hostgroup, role_assignment_params
+
+        divider :top_menu, :caption => N_('Ansible'), :parent => :configure_menu
+        menu :top_menu, :ansible_roles,
+             :caption => N_('Roles'),
+             :url_hash => { :controller => :ansible_roles, :action => :index },
+             :parent => :configure_menu
       end
     end
 
