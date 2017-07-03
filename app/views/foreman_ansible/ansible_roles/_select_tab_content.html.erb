@@ -13,3 +13,5 @@
     },
     { 'data-inheriteds' => f.object.inherited_ansible_roles.map(&:id).to_json }) %>
 </div>
+
+<%= javascript_include_tag *webpack_asset_paths('ansiblecore', :extension => 'js'), "data-turbolinks-track" => true %>
