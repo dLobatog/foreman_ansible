@@ -2,7 +2,8 @@ module ForemanAnsible
   # Allow to add fixtures to plugins
   module PluginFixtures
     FIXTURE_MAPPING = {
-      :ansible_permissions => :permissions
+      :ansible_permissions => :permissions,
+      :ansible_feature => :remote_execution_features
     }.freeze
 
     def self.add_fixtures(new_fixture_path)
