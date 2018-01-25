@@ -1,7 +1,0 @@
----
-ansible_run_host:
-  label: ansible_run_host
-  name: "Ansible: Run host roles"
-  description: "Runs an Ansible playbook which contains all the roles defined for a host"
-  provided_inputs: ""
-  host_action_button: false
