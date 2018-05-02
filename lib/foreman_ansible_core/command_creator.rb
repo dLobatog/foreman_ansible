@@ -5,7 +5,11 @@ module ForemanAnsibleCore
 
     def initialize(inventory_file, playbook_file, options = {})
       @options = options
-      @command = [{ 'JSON_INVENTORY_FILE' => inventory_file }]
+      env_vars = { 'JSON_INVENTORY_FILE' => inventory_file }
+      if !options['ssl_verified']
+        env_vars['ANSIBLE_HOST_KEY_CHECKING'] = 'False'
+      end
+      @command = []
       @command << 'ansible-playbook'
       @command = command_options(@command)
       @command << playbook_file

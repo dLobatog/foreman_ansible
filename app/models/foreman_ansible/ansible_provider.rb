@@ -20,8 +20,14 @@ if defined? ForemanRemoteExecution
           super(template_invocation, host).merge(
             'ansible_inventory' => ::ForemanAnsible::InventoryCreator.new(
               [host], template_invocation
-            ).to_hash.to_json
+            ).to_hash.to_json,
+            'ssl_verified' => host.ssl_verified
           )
+        end
+
+        def finalize_host()
+          binding.pry
+          puts 'finished'
         end
       end
     end

@@ -10,6 +10,7 @@ module ForemanAnsible
       )
 
       ForemanAnsible::Engine.register_rex_feature
+      ::Actions::RemoteExecution::RunHostJob.send(:include, ::Actions::ForemanAnsible::RunHostJobExtensions)
     end
 
     def self.register_rex_feature
