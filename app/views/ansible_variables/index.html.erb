@@ -1,0 +1,26 @@
+<% title _("Ansible Variables") %>
+
+<% title_actions ansible_proxy_import(hash_for_import_ansible_variables_path),
+  documentation_button('#4.3Variables', :root_url => ansible_doc_url) %>
+
+<table class="<%= table_css_classes 'table-fixed' %>">
+  <thead>
+    <tr>
+      <th class='col-md-6'><%= sort :name, :as => s_('Variable|Name') %></th>
+      <th class='col-md-2'><%= _('Type') %></th>
+      <th class='col-md-2'><%= _('Role') %></th>
+      <th class='col-md-2'><%= _('Actions') %></th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @ansible_variables.each do |variable| %>
+      <tr>
+        <td class="ellipsis"><%= variable.key %></td>
+        <td class="ellipsis"><%= variable.key_type %></td>
+        <td class="ellipsis"><%= variable.key_type %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= will_paginate_with_info @ansible_variables %>
