@@ -1,7 +1,7 @@
 module ForemanAnsible
   # Imports roles from smart proxy
   class RolesImporter
-    attr_reader :ansible_proxy
+    include ProxyAPI
 
     def initialize(proxy = nil)
       @ansible_proxy = proxy
@@ -27,16 +27,6 @@ module ForemanAnsible
     end
 
     private
-
-    def find_proxy_api
-      raise ::Foreman::Exception.new(N_('Proxy not found')) unless ansible_proxy
-      @proxy_api = ::ProxyAPI::Ansible.new(:url => ansible_proxy.url)
-    end
-
-    def proxy_api
-      return @proxy_api if @proxy_api
-      find_proxy_api
-    end
 
     def local_roles
       ::ForemanAnsibleCore::RolesReader.list_roles

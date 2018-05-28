@@ -1,6 +1,11 @@
 module ForemanAnsible
   # Represents the variables used in Ansible to parameterize playbooks
   class AnsibleVariable < LookupKey
+    belongs_to :ansible_role, :inverse_of => :ansible_variables
+    scoped_search :on => :key, :aliases => [:name], :complete_value => true
+    scoped_search :relation => :ansible_role, :on => :name,
+      :complete_value => true, :rename => :ansible_role
+
     def ansible?
       true
     end

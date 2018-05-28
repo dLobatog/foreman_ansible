@@ -39,4 +39,13 @@ class AnsibleRolesController < ::ApplicationController
   def default_order
     params[:order] ||= 'name ASC'
   end
+
+  def create_importer
+    @importer = ForemanAnsible::UiRolesImporter.new(@proxy)
+  end
+
+  def no_changed_roles_message
+    return _('No changes in roles detected.') if @proxy.blank?
+    _('No changes in roles detected on %s.') % @proxy.name
+  end
 end

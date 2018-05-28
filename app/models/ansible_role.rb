@@ -10,6 +10,10 @@ class AnsibleRole < ApplicationRecord
   has_many :hostgroup_ansible_roles
   has_many :hostgroups, :through => :hostgroup_ansible_roles,
                         :dependent => :destroy
+  has_many :ansible_variables, :inverse_of => :ansible_role,
+    :dependent => :destroy, :class_name => 'ForemanAnsible::AnsibleVariable',
+    :foreign_key => 'lookup_key_id'
+
 
   scoped_search :on => :name, :complete_value => true
   scoped_search :on => :updated_at

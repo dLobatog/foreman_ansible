@@ -7,17 +7,37 @@
   <thead>
     <tr>
       <th class='col-md-6'><%= sort :name, :as => s_('Variable|Name') %></th>
+      <th class='col-md-2'><%= sort :ansible_role, :as => s_('Variable|Role') %></th>
       <th class='col-md-2'><%= _('Type') %></th>
-      <th class='col-md-2'><%= _('Role') %></th>
       <th class='col-md-2'><%= _('Actions') %></th>
     </tr>
   </thead>
   <tbody>
     <% @ansible_variables.each do |variable| %>
       <tr>
-        <td class="ellipsis"><%= variable.key %></td>
-        <td class="ellipsis"><%= variable.key_type %></td>
-        <td class="ellipsis"><%= variable.key_type %></td>
+        <td class="ellipsis"><%= link_to_if_authorized(
+          variable.key,
+          hash_for_edit_ansible_variable_path(:id => variable).
+          merge(:auth_object => variable,
+                :permission => 'edit_external_parameters',
+                :authorizer => authorizer)
+        ) %></td>
+        <td class="ellipsis"><%= link_to_if_authorized(
+          variable.ansible_role.name,
+          hash_for_ansible_variables_path(:search => "ansible_role = #{variable.ansible_role}")
+        ) %></td>
+        <td class="ellipsis"><%= "String" %></td>
+        <td class="ellipsis">
+          <% links = [
+            display_delete_if_authorized(
+              hash_for_ansible_variable_path(:id => variable.id).merge(
+                :auth_object => variable,
+                :authorizer => authorizer),
+                :data => { :confirm => _("Delete %s?") % variable.key },
+                :action => :delete)
+          ] %>
+          <%= action_buttons(*links) %>
+        </td>
       </tr>
     <% end %>
   </tbody>

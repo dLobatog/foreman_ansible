@@ -1,0 +1,11 @@
+<%=
+  select_f(
+    f,
+    :ansible_role_id,
+    [f.object.ansible_role],
+    :id,
+    :to_label,
+    {},
+    { :label => _("Ansible Role"), :disabled => true }
+  )
+%>
