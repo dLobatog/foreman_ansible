@@ -2,6 +2,7 @@ module ForemanAnsible
   # Relations to make Host::Managed 'have' ansible roles
   module HostManagedExtensions
     extend ActiveSupport::Concern
+    include ::ForemanAnsible::Concerns::JobInvocationHelper
 
     included do
       has_many :host_ansible_roles, :foreign_key => :host_id
@@ -22,14 +23,13 @@ module ForemanAnsible
 
       def play_ansible_roles
         return unless ansible_roles.present? || inherited_ansible_roles.present?
-        task = ::ForemanTasks.async_task(
-          ::Actions::ForemanAnsible::PlayHostRoles,
-          self,
-          ::ForemanAnsible::ProxySelector.new,
-          :timeout => Setting['ansible_post_provision_timeout']
-        )
+        composer = job_composer(:ansible_run_host, self)
+        composer.trigger!
         logger.info("Task for Ansible roles on #{self} before_provision: "\
-                    "#{Rails.application.routes.url_helpers.task_path(task)}.")
+                    "#{job_invocation_path(composer.job_invocation)}")
+      rescue Foreman::Exception => e
+        logger.info("Error running Ansible roles on #{self} before_provision: "\
+                    "#{e.message}")
       end
     end
   end
