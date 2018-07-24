@@ -35,7 +35,7 @@ module ForemanAnsible
     end
 
     def finish_import(new, obsolete)
-      results = { :added => [], :removed => [] }
+      results = { :added => [], :obsolete => [] }
       results[:added] = create_new_variables(new) if new.present?
       results[:obsolete] = delete_old_variables(obsolete) if obsolete.present?
       results
@@ -44,7 +44,7 @@ module ForemanAnsible
     def create_new_variables(new)
       added = []
       new.each do |name, variable_properties|
-        variable = ForemanAnsible::AnsibleVariable.new(
+        variable = AnsibleVariable.new(
           JSON.parse(variable_properties)['ansible_variable']
         )
         variable.save
@@ -56,7 +56,7 @@ module ForemanAnsible
     def delete_old_variables(old)
       removed = []
       old.each do |name, variable_properties|
-        variable = ForemanAnsible::AnsibleVariable.find(
+        variable = AnsibleVariable.find(
           JSON.parse(variable_properties)['ansible_variable']['id'])
         removed << variable.key
         variable.destroy
@@ -67,7 +67,7 @@ module ForemanAnsible
     private
 
     def local_variables
-      ::ForemanAnsible::AnsibleVariable.all
+      ::AnsibleVariable.all
     end
 
     def remote_variables

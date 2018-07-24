@@ -5,13 +5,13 @@
       :url => url_for(ansible_variables_path)
     },
     {
-      :caption => _('Edit %s' % lookup_key.key)
+      :caption => _('Edit %s' % @ansible_variable.key)
     }
   ],
   :switchable => false
 ) %>
 <% title(_('Edit Ansible Variable')) %>
-<%= form_for(lookup_key, :url => ansible_variable_lookup_values_path(:action => 'create', :ansible_variable_id => lookup_key.id)) do |f| %>
+<%= form_for(@ansible_variable) do |f| %>
     <%= render 'lookup_keys/fields', :f => f %>
     <%= submit_or_cancel f %>
 <% end %>
